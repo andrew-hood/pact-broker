@@ -5,17 +5,18 @@ import {
   AuthenticationError,
   AuthorizationError,
   ErrorFallbackProps,
-  useQueryErrorResetBoundary
+  useQueryErrorResetBoundary,
 } from "blitz"
 import { ErrorBoundary } from "react-error-boundary"
 import LoginForm from "app/auth/components/LoginForm"
+import { globalCSS } from "@go1d/go1d"
 
 export default function App({ Component, pageProps }: AppProps) {
   const getLayout = Component.getLayout || ((page) => page)
   const router = useRouter()
-  const {reset} = useQueryErrorResetBoundary()
+  const { reset } = useQueryErrorResetBoundary()
 
-
+  globalCSS()
 
   return (
     <ErrorBoundary
@@ -23,7 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
       resetKeys={[router.asPath]}
       onReset={reset}
     >
-        {getLayout(<Component {...pageProps} />)}
+      {getLayout(<Component {...pageProps} />)}
     </ErrorBoundary>
   )
 }
