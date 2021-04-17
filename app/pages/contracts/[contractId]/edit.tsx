@@ -35,7 +35,7 @@ export const EditContract = () => {
                 ...values,
               })
               await setQueryData(updated)
-              router.push(Routes.ShowContractPage({ [contractId]: updated.id }))
+              router.push(Routes.ShowContractPage({ contractId: String(updated.id) }))
             } catch (error) {
               console.error(error)
               return {

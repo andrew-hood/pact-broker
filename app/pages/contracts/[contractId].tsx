@@ -20,7 +20,7 @@ export const Contract = () => {
         <h1>Contract {contract.id}</h1>
         <pre>{JSON.stringify(contract, null, 2)}</pre>
 
-        <Link href={Routes.EditContractPage({ [contractId]: contract.id })}>
+        <Link href={Routes.EditContractPage({ contractId: String(contract.id) })}>
           <a>Edit</a>
         </Link>
 

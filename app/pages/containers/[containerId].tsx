@@ -20,7 +20,7 @@ export const Container = () => {
         <h1>Container {container.id}</h1>
         <pre>{JSON.stringify(container, null, 2)}</pre>
 
-        <Link href={Routes.EditContainerPage({ [containerId]: container.id })}>
+        <Link href={Routes.EditContainerPage({ containerId: String(container.id) })}>
           <a>Edit</a>
         </Link>
 

@@ -35,7 +35,7 @@ export const EditContainer = () => {
                 ...values,
               })
               await setQueryData(updated)
-              router.push(Routes.ShowContainerPage({ [containerId]: updated.id }))
+              router.push(Routes.ShowContainerPage({ containerId: String(updated.id) }))
             } catch (error) {
               console.error(error)
               return {

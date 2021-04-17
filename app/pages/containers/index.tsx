@@ -22,7 +22,7 @@ export const ContainersList = () => {
       <ul>
         {containers.map((container) => (
           <li key={container.id}>
-            <Link href={Routes.ShowContainerPage({ [containerId]: container.id })}>
+            <Link href={Routes.ShowContainerPage({ containerId: String(container.id) })}>
               <a>{container.name}</a>
             </Link>
           </li>
