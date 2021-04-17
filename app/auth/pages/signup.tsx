@@ -1,14 +1,15 @@
 import { useRouter, BlitzPage, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
 import { SignupForm } from "app/auth/components/SignupForm"
+import { View } from "@go1d/go1d"
 
 const SignupPage: BlitzPage = () => {
   const router = useRouter()
 
   return (
-    <div>
+    <View height="100%" alignItems="center" justifyContent="center">
       <SignupForm onSuccess={() => router.push(Routes.Home())} />
-    </div>
+    </View>
   )
 }
 

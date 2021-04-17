@@ -2,7 +2,7 @@ import { resolver } from "blitz"
 import db from "db"
 import * as z from "zod"
 
-const UpdateTest = z
+const UpdateContract = z
   .object({
     id: z.number(),
     name: z.string(),
@@ -10,12 +10,12 @@ const UpdateTest = z
   .nonstrict()
 
 export default resolver.pipe(
-  resolver.zod(UpdateTest),
+  resolver.zod(UpdateContract),
   resolver.authorize(),
   async ({ id, ...data }) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const test = await db.test.update({ where: { id }, data })
+    const contract = await db.contract.update({ where: { id }, data })
 
-    return test
+    return contract
   }
 )

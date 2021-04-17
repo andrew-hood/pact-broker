@@ -1,48 +1,21 @@
-import { Suspense } from "react"
-import { Link, BlitzPage, useMutation, Routes } from "blitz"
+import { BlitzPage, Link, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
+import { ButtonFilled, Container, Heading, View } from "@go1d/go1d"
 import { useCurrentUser } from "app/core/hooks/useCurrentUser"
-import logout from "app/auth/mutations/logout"
-import { Container, Heading, View } from "@go1d/go1d"
+import { Suspense } from "react"
 
-const UserInfo = () => {
+const Dashboard = () => {
   const currentUser = useCurrentUser()
-  const [logoutMutation] = useMutation(logout)
-
   if (currentUser) {
     return (
-      <>
-        <button
-          className="button small"
-          onClick={async () => {
-            await logoutMutation()
-          }}
-        >
-          Logout
-        </button>
-        <div>
-          User id: <code>{currentUser.id}</code>
-          <br />
-          User role: <code>{currentUser.role}</code>
-        </div>
-      </>
-    )
-  } else {
-    return (
-      <>
-        <Link href={Routes.SignupPage()}>
-          <a className="button small">
-            <strong>Sign Up</strong>
-          </a>
+      <View>
+        <Link href={Routes.ContractsPage()} passHref>
+          <ButtonFilled>View Contracts</ButtonFilled>
         </Link>
-        <Link href={Routes.LoginPage()}>
-          <a className="button small">
-            <strong>Login</strong>
-          </a>
-        </Link>
-      </>
+      </View>
     )
   }
+  return null
 }
 
 const Home: BlitzPage = () => {
@@ -58,11 +31,11 @@ const Home: BlitzPage = () => {
           </Heading>
         </Container>
       </View>
-      <View paddingY={6}>
+      <Container contain="normal" paddingY={6}>
         <Suspense fallback="Loading...">
-          <UserInfo />
+          <Dashboard />
         </Suspense>
-      </View>
+      </Container>
     </>
   )
 }

@@ -1,14 +1,14 @@
 import { Suspense } from "react"
 import { Head, Link, usePaginatedQuery, useRouter, BlitzPage, Routes } from "blitz"
 import Layout from "app/core/layouts/Layout"
-import getTests from "app/tests/queries/getTests"
+import getContainers from "app/containers/queries/getContainers"
 
 const ITEMS_PER_PAGE = 100
 
-export const TestsList = () => {
+export const ContainersList = () => {
   const router = useRouter()
   const page = Number(router.query.page) || 0
-  const [{ tests, hasMore }] = usePaginatedQuery(getTests, {
+  const [{ containers, hasMore }] = usePaginatedQuery(getContainers, {
     orderBy: { id: "asc" },
     skip: ITEMS_PER_PAGE * page,
     take: ITEMS_PER_PAGE,
@@ -20,10 +20,10 @@ export const TestsList = () => {
   return (
     <div>
       <ul>
-        {tests.map((test) => (
-          <li key={test.id}>
-            <Link href={Routes.ShowTestPage({ testId: String(test.id) })}>
-              <a>{test.name}</a>
+        {containers.map((container) => (
+          <li key={container.id}>
+            <Link href={Routes.ShowContainerPage({ [containerId]: container.id })}>
+              <a>{container.name}</a>
             </Link>
           </li>
         ))}
@@ -39,29 +39,29 @@ export const TestsList = () => {
   )
 }
 
-const TestsPage: BlitzPage = () => {
+const ContainersPage: BlitzPage = () => {
   return (
     <>
       <Head>
-        <title>Tests</title>
+        <title>Containers</title>
       </Head>
 
       <div>
         <p>
-          <Link href={Routes.NewTestPage()}>
-            <a>Create Test</a>
+          <Link href={Routes.NewContainerPage()}>
+            <a>Create Container</a>
           </Link>
         </p>
 
         <Suspense fallback={<div>Loading...</div>}>
-          <TestsList />
+          <ContainersList />
         </Suspense>
       </div>
     </>
   )
 }
 
-TestsPage.authenticate = true
-TestsPage.getLayout = (page) => <Layout>{page}</Layout>
+ContainersPage.authenticate = true
+ContainersPage.getLayout = (page) => <Layout>{page}</Layout>
 
-export default TestsPage
+export default ContainersPage

@@ -2,15 +2,15 @@ import { resolver } from "blitz"
 import db from "db"
 import * as z from "zod"
 
-const CreateTest = z
+const CreateContainer = z
   .object({
     name: z.string(),
   })
   .nonstrict()
 
-export default resolver.pipe(resolver.zod(CreateTest), resolver.authorize(), async (input) => {
+export default resolver.pipe(resolver.zod(CreateContainer), resolver.authorize(), async (input) => {
   // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-  const test = await db.test.create({ data: input })
+  const container = await db.container.create({ data: input })
 
-  return test
+  return container
 })

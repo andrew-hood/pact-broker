@@ -4,12 +4,13 @@ import { LabeledTextField } from "app/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/core/components/Form"
 import { ForgotPassword } from "app/auth/validations"
 import forgotPassword from "app/auth/mutations/forgotPassword"
+import { View } from "@go1d/go1d"
 
 const ForgotPasswordPage: BlitzPage = () => {
   const [forgotPasswordMutation, { isSuccess }] = useMutation(forgotPassword)
 
   return (
-    <div>
+    <View height="100%" alignItems="center" justifyContent="center">
       <h1>Forgot your password?</h1>
 
       {isSuccess ? (
@@ -38,7 +39,7 @@ const ForgotPasswordPage: BlitzPage = () => {
           <LabeledTextField name="email" label="Email" placeholder="Email" />
         </Form>
       )}
-    </div>
+    </View>
   )
 }
 
