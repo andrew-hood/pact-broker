@@ -1,44 +1,69 @@
 import { BlitzPage, useMutation } from "blitz"
 import Layout from "app/core/layouts/Layout"
-import { LabeledTextField } from "app/core/components/LabeledTextField"
-import { Form, FORM_ERROR } from "app/core/components/Form"
+import { FORM_ERROR } from "app/core/components/Form"
 import { ForgotPassword } from "app/auth/validations"
 import forgotPassword from "app/auth/mutations/forgotPassword"
-import { View } from "@go1d/go1d"
+import { ButtonFilled, Field, Form, Heading, Text, TextInput, View } from "@go1d/go1d"
 
 const ForgotPasswordPage: BlitzPage = () => {
   const [forgotPasswordMutation, { isSuccess }] = useMutation(forgotPassword)
 
   return (
-    <View height="100%" alignItems="center" justifyContent="center">
-      <h1>Forgot your password?</h1>
-
-      {isSuccess ? (
-        <div>
-          <h2>Request Submitted</h2>
-          <p>
-            If your email is in our system, you will receive instructions to reset your password
-            shortly.
-          </p>
-        </div>
-      ) : (
-        <Form
-          submitText="Send Reset Password Instructions"
-          schema={ForgotPassword}
-          initialValues={{ email: "" }}
-          onSubmit={async (values) => {
-            try {
-              await forgotPasswordMutation(values)
-            } catch (error) {
-              return {
-                [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",
-              }
-            }
-          }}
-        >
-          <LabeledTextField name="email" label="Email" placeholder="Email" />
-        </Form>
-      )}
+    <View height="100%" alignItems="center" justifyContent="center" backgroundColor="soft">
+      <View
+        backgroundColor="background"
+        padding={5}
+        borderRadius={3}
+        width={350}
+        boxShadow="distant"
+      >
+        {isSuccess ? (
+          <>
+            <Heading
+              semanticElement="h4"
+              visualHeadingLevel="Heading 4"
+              textAlign="center"
+              marginBottom={4}
+            >
+              Request Submitted
+            </Heading>
+            <Text>
+              If your email is in our system, you will receive instructions to reset your password
+              shortly.
+            </Text>
+          </>
+        ) : (
+          <>
+            <Heading
+              semanticElement="h4"
+              visualHeadingLevel="Heading 4"
+              textAlign="center"
+              marginBottom={4}
+            >
+              Forgot your password?
+            </Heading>
+            <Form
+              //schema={ForgotPassword}
+              initialValues={{ email: "" }}
+              onSubmit={async (values, actions) => {
+                try {
+                  await forgotPasswordMutation(values)
+                } catch (error) {
+                  actions.setErrors({
+                    email: "Sorry, we had an unexpected error. Please try again.",
+                  })
+                  actions.setSubmitting(false)
+                }
+              }}
+            >
+              <Field component={TextInput} name="email" label="Email" required />
+              <ButtonFilled type="submit" color="accent">
+                Send Reset Password Instructions
+              </ButtonFilled>
+            </Form>
+          </>
+        )}
+      </View>
     </View>
   )
 }

@@ -7,7 +7,7 @@ const LoginPage: BlitzPage = () => {
   const router = useRouter()
 
   return (
-    <View height="100%" alignItems="center" justifyContent="center">
+    <View height="100%" alignItems="center" justifyContent="center" backgroundColor="soft">
       <LoginForm
         onSuccess={() => {
           const next = router.query.next ? decodeURIComponent(router.query.next as string) : "/"

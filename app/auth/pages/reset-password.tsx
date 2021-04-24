@@ -4,13 +4,14 @@ import { LabeledTextField } from "app/core/components/LabeledTextField"
 import { Form, FORM_ERROR } from "app/core/components/Form"
 import { ResetPassword } from "app/auth/validations"
 import resetPassword from "app/auth/mutations/resetPassword"
+import { View } from "@go1d/go1d"
 
 const ResetPasswordPage: BlitzPage = () => {
   const query = useRouterQuery()
   const [resetPasswordMutation, { isSuccess }] = useMutation(resetPassword)
 
   return (
-    <div>
+    <View height="100%" alignItems="center" justifyContent="center" backgroundColor="soft">
       <h1>Set a New Password</h1>
 
       {isSuccess ? (
@@ -49,7 +50,7 @@ const ResetPasswordPage: BlitzPage = () => {
           />
         </Form>
       )}
-    </div>
+    </View>
   )
 }
 

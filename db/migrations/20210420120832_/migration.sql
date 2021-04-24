@@ -42,23 +42,36 @@ CREATE TABLE "Token" (
 );
 
 -- CreateTable
-CREATE TABLE "Contract" (
+CREATE TABLE "Pact" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "name" TEXT,
-    "payload" TEXT,
+    "json" TEXT NOT NULL,
+    "versionId" INTEGER NOT NULL,
+    "providerId" INTEGER NOT NULL,
 
     PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Container" (
+CREATE TABLE "Version" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "number" TEXT NOT NULL,
+    "repository_ref" TEXT,
+    "pactipantId" INTEGER NOT NULL,
+
+    PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Pactipant" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" TEXT NOT NULL,
-    "type" INTEGER NOT NULL,
+    "repository_url" TEXT,
 
     PRIMARY KEY ("id")
 );
@@ -72,8 +85,23 @@ CREATE UNIQUE INDEX "Session.handle_unique" ON "Session"("handle");
 -- CreateIndex
 CREATE UNIQUE INDEX "Token.hashedToken_type_unique" ON "Token"("hashedToken", "type");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Version.number_unique" ON "Version"("number");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Pactipant.name_unique" ON "Pactipant"("name");
+
 -- AddForeignKey
 ALTER TABLE "Session" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Token" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Pact" ADD FOREIGN KEY ("versionId") REFERENCES "Version"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Pact" ADD FOREIGN KEY ("providerId") REFERENCES "Pactipant"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Version" ADD FOREIGN KEY ("pactipantId") REFERENCES "Pactipant"("id") ON DELETE CASCADE ON UPDATE CASCADE;

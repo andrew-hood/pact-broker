@@ -3,6 +3,8 @@ import * as z from "zod"
 const password = z.string().min(10).max(100)
 
 export const Signup = z.object({
+  firstname: z.string().nonempty(""),
+  lastname: z.string().nonempty(""),
   email: z.string().email(),
   password,
 })
@@ -30,4 +32,10 @@ export const ResetPassword = z
 export const ChangePassword = z.object({
   currentPassword: z.string(),
   newPassword: password,
+})
+
+export const UpdateUser = z.object({
+  id: z.number(),
+  firstname: z.string().nonempty(""),
+  lastname: z.string().nonempty(""),
 })

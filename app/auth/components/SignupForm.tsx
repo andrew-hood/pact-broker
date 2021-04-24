@@ -1,9 +1,8 @@
 import { useMutation } from "blitz"
-import { LabeledTextField } from "app/core/components/LabeledTextField"
-import { Form, FORM_ERROR } from "app/core/components/Form"
 import signup from "app/auth/mutations/signup"
 import { Signup } from "app/auth/validations"
-import { Heading, View } from "@go1d/go1d"
+import { ButtonFilled, Field, Form, Heading, TextInput, View } from "@go1d/go1d"
+import { validateSchema } from "app/core/utils/validations"
 
 type SignupFormProps = {
   onSuccess?: () => void
@@ -13,31 +12,50 @@ export const SignupForm = (props: SignupFormProps) => {
   const [signupMutation] = useMutation(signup)
 
   return (
-    <View>
-      <Heading semanticElement="h4" visualHeadingLevel="Heading 4">
+    <View
+      backgroundColor="background"
+      paddingY={6}
+      paddingX={5}
+      borderRadius={3}
+      width={480}
+      boxShadow="distant"
+    >
+      <Heading
+        semanticElement="h4"
+        visualHeadingLevel="Heading 4"
+        textAlign="center"
+        marginBottom={8}
+      >
         Create an account
       </Heading>
 
       <Form
-        submitText="Create Account"
-        schema={Signup}
-        initialValues={{ email: "", password: "" }}
-        onSubmit={async (values) => {
+        validate={(values) => validateSchema(Signup, values)}
+        initialValues={{ firstname: "", lastname: "", email: "", password: "" }}
+        onSubmit={async (values, actions) => {
           try {
             await signupMutation(values)
             props.onSuccess?.()
           } catch (error) {
+            actions.setSubmitting(false)
             if (error.code === "P2002" && error.meta?.target?.includes("email")) {
               // This error comes from Prisma
-              return { email: "This email is already being used" }
+              actions.setErrors({ email: "This email is already being used" })
             } else {
-              return { [FORM_ERROR]: error.toString() }
+              actions.setErrors({ email: error.toString() })
             }
           }
         }}
       >
-        <LabeledTextField name="email" label="Email" placeholder="Email" />
-        <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
+        <View flexDirection="row" justifyContent="space-between">
+          <Field component={TextInput} name="firstname" label="First Name" required />
+          <Field component={TextInput} name="lastname" label="Last Name" required />
+        </View>
+        <Field component={TextInput} name="email" label="Email" required />
+        <Field component={TextInput} name="password" label="Password" type="password" required />
+        <ButtonFilled type="submit" color="accent">
+          Sign up
+        </ButtonFilled>
       </Form>
     </View>
   )

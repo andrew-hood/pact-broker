@@ -64,18 +64,36 @@ model Token {
 //   RESET_PASSWORD
 // }
 
-model Contract {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String?
-  payload   String?
+model Pact {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  json       String
+  versionId  Int
+  providerId Int
+
+  Versions  Version   @relation(fields: [versionId], references: [id])
+  Providers Pactipant @relation(fields: [providerId], references: [id])
 }
 
-model Container {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  type      Int
+model Version {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  number         String   @unique
+  repository_ref String?
+  pactipantId    Int
+
+  Pactipant Pactipant @relation(fields: [pactipantId], references: [id])
+  Pact      Pact[]
+}
+
+model Pactipant {
+  id             Int       @id @default(autoincrement())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  name           String    @unique
+  repository_url String?
+  Pact           Pact[]
+  Version        Version[]
 }
