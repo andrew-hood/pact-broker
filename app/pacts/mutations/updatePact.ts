@@ -14,7 +14,7 @@ export default resolver.pipe(
   resolver.authorize(),
   async ({ id, ...data }) => {
     // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const pact = await db.pact.update({ where: { id }, data })
+    const pact = await db.pact.update({ where: { id }, data: data as any })
 
     return pact
   }
